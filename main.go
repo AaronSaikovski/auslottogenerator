@@ -6,20 +6,19 @@ DESCRIPTION:  Allows generation of numbers for Lotto, OzLotto and Powerball
 			  Powerball - Allows for 1-35 numbers with 7 numbers per game and 1-20 single number for the Powerball number with a total maximum of 50 games per entry
 
 AUTHOR/S:     asaikovski
-VERSION:      1.1.0
+VERSION:      1.2.0
 
 VERSION HISTORY:
   1.0.0 - Initial version release
   1.1.0 - Fixed random number duplication results bug, optimisations and bug fixes. also added pre-commit hooks
+  1.2.0 - Fixed/removed OS specific input readers - Verified working on Windows 11 and Mac OS Ventura 13.1
 */
 
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math/rand"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -62,16 +61,13 @@ func generateRandomNumbers(maxVal int, numbersPerGame int) []int {
 // Get the number of games to play from the console
 func getNumberOfGames() int {
 	fmt.Print("How many games to play (1-50)?:")
-	numGamesReader := bufio.NewReader(os.Stdin)
-	input, err := numGamesReader.ReadString('\n')
+	var numGames string
+	fmt.Scanln(&numGames)
+	numGamesInput, err := strconv.Atoi(strings.TrimSuffix(numGames, "\n"))
 	if err != nil {
-		fmt.Println("Number of games needs to be 1 or more", err)
+		fmt.Println("Number of games, input error", err)
 		return 0
-	}
-	numGamesInput, err := strconv.Atoi(strings.TrimSuffix(input, "\n"))
-	if err != nil {
-		fmt.Println("Number of games, input error")
-		return 0
+		//panic(err)
 	}
 
 	return numGamesInput
@@ -80,15 +76,11 @@ func getNumberOfGames() int {
 // Get the maximum number of random numbers per game to use to seed random number generator
 func getMaxRandomNumbers() int {
 	fmt.Print("Random numbers to use per game (1-45)?:")
-	numbersPerGamesReader := bufio.NewReader(os.Stdin)
-	input, err := numbersPerGamesReader.ReadString('\n')
+	var numbersPerGames string
+	fmt.Scanln(&numbersPerGames)
+	maxRandomNumbersPerGamesInput, err := strconv.Atoi(strings.TrimSuffix(numbersPerGames, "\n"))
 	if err != nil {
-		fmt.Println("Random numbers per game needs to be 1 or more", err)
-		return 0
-	}
-	maxRandomNumbersPerGamesInput, err := strconv.Atoi(strings.TrimSuffix(input, "\n"))
-	if err != nil {
-		fmt.Println("Random numbers per game, input error")
+		fmt.Println("Random numbers per game, input error", err)
 		return 0
 	}
 
@@ -98,15 +90,13 @@ func getMaxRandomNumbers() int {
 // Get the maximum number selected numbers per game
 func getMaxNumbersPerGame() int {
 	fmt.Print("Maximum numbers to generate per game?:")
-	maxNumbersPerGame := bufio.NewReader(os.Stdin)
-	input, err := maxNumbersPerGame.ReadString('\n')
+
+	var maxNumbersPerGame string
+	fmt.Scanln(&maxNumbersPerGame)
+	numbersPerGamesInput, err := strconv.Atoi(strings.TrimSuffix(maxNumbersPerGame, "\n"))
 	if err != nil {
-		fmt.Println("Numbers to generate per game - 1 or more", err)
-		return 0
-	}
-	numbersPerGamesInput, err := strconv.Atoi(strings.TrimSuffix(input, "\n"))
-	if err != nil {
-		fmt.Println("RNumbers per game, input error")
+		fmt.Println("RNumbers per game, input error", err)
+
 		return 0
 	}
 
@@ -137,5 +127,4 @@ func main() {
 		fmt.Println("Game", i+1, generateRandomNumbers(maxRandomNumbersPerGame, maxNumbersPerGame))
 	}
 	fmt.Println("******************************")
-
 }
