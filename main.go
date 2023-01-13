@@ -6,12 +6,13 @@ DESCRIPTION:  Allows generation of numbers for Lotto, OzLotto and Powerball
 			  Powerball - Allows for 1-35 numbers with 7 numbers per game and 1-20 single number for the Powerball number with a total maximum of 50 games per entry
 
 AUTHOR/S:     asaikovski
-VERSION:      1.2.0
+VERSION:      1.3.0
 
 VERSION HISTORY:
   1.0.0 - Initial version release
   1.1.0 - Fixed random number duplication results bug, optimisations and bug fixes. also added pre-commit hooks
   1.2.0 - Fixed/removed OS specific input readers - Verified working on Windows 11 and Mac OS Ventura 13.1
+  1.3.0 - Optimised code - added input function
 */
 
 package main
@@ -58,49 +59,13 @@ func generateRandomNumbers(maxVal int, numbersPerGame int) []int {
 	return numbers
 }
 
-// Get the number of games to play from the console
-func getNumberOfGames() int {
-	fmt.Print("How many games to play (1-50)?:")
-	var numGames string
-	fmt.Scanln(&numGames)
-	numGamesInput, err := strconv.Atoi(strings.TrimSuffix(numGames, "\n"))
-	if err != nil {
-		fmt.Println("Number of games, input error", err)
-		return 0
-		//panic(err)
-	}
-
-	return numGamesInput
-}
-
-// Get the maximum number of random numbers per game to use to seed random number generator
-func getMaxRandomNumbers() int {
-	fmt.Print("Random numbers to use per game (1-45)?:")
-	var numbersPerGames string
-	fmt.Scanln(&numbersPerGames)
-	maxRandomNumbersPerGamesInput, err := strconv.Atoi(strings.TrimSuffix(numbersPerGames, "\n"))
-	if err != nil {
-		fmt.Println("Random numbers per game, input error", err)
-		return 0
-	}
-
-	return maxRandomNumbersPerGamesInput
-}
-
-// Get the maximum number selected numbers per game
-func getMaxNumbersPerGame() int {
-	fmt.Print("Maximum numbers to generate per game?:")
-
-	var maxNumbersPerGame string
-	fmt.Scanln(&maxNumbersPerGame)
-	numbersPerGamesInput, err := strconv.Atoi(strings.TrimSuffix(maxNumbersPerGame, "\n"))
-	if err != nil {
-		fmt.Println("RNumbers per game, input error", err)
-
-		return 0
-	}
-
-	return numbersPerGamesInput
+//get the console input
+func getInput(prompt string) int {
+	fmt.Print(prompt)
+    var input string
+    fmt.Scanln(&input)
+    num, _ := strconv.ParseInt(strings.TrimSuffix(input, "\n"), 10, 64)
+    return int(num)
 }
 
 // Main
@@ -111,13 +76,13 @@ func main() {
 	fmt.Println("******************************")
 
 	// get input for number of games
-	maxNumberGames := getNumberOfGames()
+	maxNumberGames := getInput("How many games to play (1-50)?:")
 
 	// Set the maximum random numbers per game
-	maxRandomNumbersPerGame := getMaxRandomNumbers()
+	maxRandomNumbersPerGame := getInput("Random numbers to use per game (1-45)?:")
 
 	// get the maximum numbers per game
-	maxNumbersPerGame := getMaxNumbersPerGame()
+	maxNumbersPerGame := getInput("Maximum numbers to generate per game?:")
 
 	fmt.Println("\n******************************")
 	fmt.Println("** Results **")
