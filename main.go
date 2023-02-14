@@ -71,18 +71,18 @@ func getInput(prompt string) int {
 // Main
 func main() {
 
-	fmt.Println("******************************")
-	fmt.Println("** Lottery number generator **")
-	fmt.Println("******************************")
+	fmt.Println("***************************************")
+	fmt.Println("** Lottery number generator - v1.3.0 **")
+	fmt.Println("***************************************")
 
 	// get input for number of games
-	maxNumberGames := getInput("How many games to play (1-50)?:")
+	maxNumberGames := getInput("How many games to play?: ")
 
 	// Set the maximum random numbers per game
-	maxRandomNumbersPerGame := getInput("Random numbers to use per game (1-45)?:")
+	maxRandomNumbersPerGame := getInput("Random number pool to use per game?: ")
 
 	// get the maximum numbers per game
-	maxNumbersPerGame := getInput("Maximum numbers to generate per game?:")
+	maxNumbersPerGame := getInput("Maximum numbers per game?: ")
 
 	fmt.Println("\n******************************")
 	fmt.Println("** Results **")
