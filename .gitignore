@@ -21,3 +21,5 @@ vendor
 .golangci.toml
 .pre-commit-config.yaml
 .config.yaml
+
+*lotto*
